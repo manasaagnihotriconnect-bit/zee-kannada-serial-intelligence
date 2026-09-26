@@ -4,47 +4,81 @@ from urllib.parse import quote
 
 
 def search_zee5(serial_name):
-    """
-    Searches the web for the requested Zee Kannada serial
-    and attempts to identify the latest available episode.
-    """
 
-    query = f"site:zee5.com {serial_name} Zee Kannada latest episode"
+    query = f'site:zee5.com/tv-shows/details/ "{serial_name}" "Kannada"'
 
-    url = "https://www.google.com/search?q=" + quote(query)
+    url = "https://www.google.com/search"
+
+    params = {
+        "q": query
+    }
 
     headers = {
-        "User-Agent": "Mozilla/5.0"
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/140.0 Safari/537.36"
+        ),
+        "Accept-Language": "en-US,en;q=0.9"
     }
 
     try:
+
         response = requests.get(
             url,
+            params=params,
             headers=headers,
-            timeout=15
+            timeout=20
         )
 
         if response.status_code != 200:
             return None
 
-        soup = BeautifulSoup(response.text, "html.parser")
+        soup = BeautifulSoup(
+            response.text,
+            "html.parser"
+        )
 
         results = []
 
-        for result in soup.select("div.MjjYud"):
-            link = result.select_one("a")
-            title = result.select_one("h3")
+        # Google search result links
+        for link in soup.find_all("a"):
 
-            if link and title:
+            href = link.get("href", "")
+
+            text = link.get_text(
+                " ",
+                strip=True
+            )
+
+            if (
+                "zee5.com/tv-shows/details/" in href
+                and text
+            ):
+
                 results.append({
-                    "title": title.get_text(" ", strip=True),
-                    "url": link.get("href")
+                    "title": text,
+                    "url": href
                 })
 
-        if results:
-            return results[:5]
+        # Remove duplicates
+        unique_results = []
+
+        seen = set()
+
+        for result in results:
+
+            if result["url"] not in seen:
+
+                seen.add(result["url"])
+                unique_results.append(result)
+
+        if unique_results:
+
+            return unique_results[:5]
 
         return None
 
-    except Exception as e:
+    except Exception:
+
         return None
