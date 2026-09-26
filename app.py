@@ -6,52 +6,155 @@ st.set_page_config(
     layout="wide"
 )
 
+# -----------------------------
+# HEADER
+# -----------------------------
+
 st.title("📺 Zee Kannada Serial Intelligence")
-st.caption("AI-powered Serial & Market Research Dashboard")
+st.caption(
+    "Automated market research and content intelligence for Zee Kannada serials"
+)
 
 st.divider()
 
-serial = st.selectbox(
-    "Select Serial",
-    [
-        "Jagadhatri",
-        "Other Zee Kannada Serial"
-    ]
+# -----------------------------
+# SERIAL INPUT
+# -----------------------------
+
+st.subheader("🔎 Analyze a Zee Kannada Serial")
+
+serial_name = st.text_input(
+    "Enter Serial Name",
+    placeholder="e.g., Lakshmi Nivasa"
 )
 
-if st.button("🔎 Analyze Latest Episode", type="primary"):
+st.caption(
+    "Enter any Zee Kannada serial. The system will automatically discover "
+    "the latest available episode and relevant information."
+)
 
-    st.success(f"Starting analysis for {serial}...")
+if st.button("🚀 ANALYZE SERIAL", type="primary"):
 
-    st.header("📊 Episode Intelligence")
+    if not serial_name.strip():
 
-    col1, col2, col3 = st.columns(3)
+        st.warning("Please enter a serial name.")
 
-    with col1:
-        st.metric("TRP", "Data Pending")
+    else:
 
-    with col2:
-        st.metric("TRP Change", "Data Pending")
+        st.success(
+            f"Starting automatic analysis for **{serial_name}**..."
+        )
 
-    with col3:
-        st.metric("Episode", "Finding...")
+        # -----------------------------
+        # PERFORMANCE
+        # -----------------------------
 
-    st.divider()
+        st.header("📊 Performance")
 
-    st.subheader("📖 Storyline")
-    st.info("Episode storyline will appear here after automatic data collection.")
+        col1, col2, col3, col4 = st.columns(4)
 
-    st.subheader("🔥 High Point")
-    st.info("The AI will identify the strongest narrative moment.")
+        with col1:
+            st.metric("TRP", "Searching...")
 
-    st.subheader("🪝 Major Hook")
-    st.info("The AI will identify the key reason to watch the next episode.")
+        with col2:
+            st.metric("TRP Change", "Searching...")
 
-    st.subheader("👤 Character Intelligence")
-    st.info("Character focus and story movement will appear here.")
+        with col3:
+            st.metric("Latest Episode", "Finding...")
 
-    st.subheader("💬 Audience Intelligence")
-    st.info("Public audience reactions will be analyzed here.")
+        with col4:
+            st.metric("Air Date", "Finding...")
 
-    st.subheader("📱 Digital Opportunities")
-    st.info("Reels, polls, static posts and promo hooks will be generated here.")
+        st.divider()
+
+        # -----------------------------
+        # STORYLINE
+        # -----------------------------
+
+        st.header("📖 Storyline")
+
+        st.info(
+            "The system will automatically find the latest available "
+            "episode and generate the storyline."
+        )
+
+        # -----------------------------
+        # HIGH POINT
+        # -----------------------------
+
+        st.header("🔥 High Point")
+
+        st.info(
+            "The AI will identify the strongest narrative moment "
+            "from the latest available episode."
+        )
+
+        # -----------------------------
+        # MAJOR HOOK
+        # -----------------------------
+
+        st.header("🪝 Major Hook")
+
+        st.info(
+            "The AI will identify the main unresolved question, "
+            "cliffhanger or reason to watch the next episode."
+        )
+
+        # -----------------------------
+        # CHARACTER INTELLIGENCE
+        # -----------------------------
+
+        st.header("👤 Character Intelligence")
+
+        st.info(
+            "The system will identify the primary characters, "
+            "their roles and major character developments."
+        )
+
+        # -----------------------------
+        # AUDIENCE INTELLIGENCE
+        # -----------------------------
+
+        st.header("💬 Audience Intelligence")
+
+        st.info(
+            "Public audience reactions will be collected and "
+            "grouped into topics, sentiment and viewer questions."
+        )
+
+        # -----------------------------
+        # COMPETITIVE INTELLIGENCE
+        # -----------------------------
+
+        st.header("🆚 Competitive Intelligence")
+
+        st.info(
+            "Relevant competing Kannada serials and their "
+            "publicly available content will be analyzed."
+        )
+
+        # -----------------------------
+        # DIGITAL OPPORTUNITIES
+        # -----------------------------
+
+        st.header("📱 Digital Opportunities")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.markdown("### 🎬 Reels")
+            st.write("Automatically generated from episode insights.")
+
+        with col2:
+            st.markdown("### 📊 Polls")
+            st.write("Audience interaction ideas based on the story.")
+
+        with col3:
+            st.markdown("### 📢 Promo Hooks")
+            st.write("Potential promotional angles from the episode.")
+
+else:
+
+    st.info(
+        "Enter any Zee Kannada serial above to begin the analysis."
+    )
