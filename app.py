@@ -1,4 +1,6 @@
 import streamlit as st
+from discovery import search_zee5
+
 
 st.set_page_config(
     page_title="Zee Kannada Serial Intelligence",
@@ -6,20 +8,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# -----------------------------
-# HEADER
-# -----------------------------
-
 st.title("📺 Zee Kannada Serial Intelligence")
+
 st.caption(
-    "Automated market research and content intelligence for Zee Kannada serials"
+    "Automated market research and content intelligence "
+    "for Zee Kannada serials"
 )
 
 st.divider()
-
-# -----------------------------
-# SERIAL INPUT
-# -----------------------------
 
 st.subheader("🔎 Analyze a Zee Kannada Serial")
 
@@ -29,8 +25,8 @@ serial_name = st.text_input(
 )
 
 st.caption(
-    "Enter any Zee Kannada serial. The system will automatically discover "
-    "the latest available episode and relevant information."
+    "Enter any Zee Kannada serial. The system will automatically "
+    "search for the latest available information."
 )
 
 if st.button("🚀 ANALYZE SERIAL", type="primary"):
@@ -41,120 +37,95 @@ if st.button("🚀 ANALYZE SERIAL", type="primary"):
 
     else:
 
-        st.success(
-            f"Starting automatic analysis for **{serial_name}**..."
-        )
+        with st.spinner(
+            f"Finding information for {serial_name}..."
+        ):
 
-        # -----------------------------
-        # PERFORMANCE
-        # -----------------------------
+            results = search_zee5(serial_name)
 
-        st.header("📊 Performance")
+        if not results:
 
-        col1, col2, col3, col4 = st.columns(4)
+            st.error(
+                "No reliable source was found for this serial."
+            )
 
-        with col1:
-            st.metric("TRP", "Searching...")
+        else:
 
-        with col2:
-            st.metric("TRP Change", "Searching...")
+            st.success(
+                f"Sources found for **{serial_name}**"
+            )
 
-        with col3:
-            st.metric("Latest Episode", "Finding...")
+            st.divider()
 
-        with col4:
-            st.metric("Air Date", "Finding...")
+            st.header("🔎 Discovered Sources")
 
-        st.divider()
+            for result in results:
 
-        # -----------------------------
-        # STORYLINE
-        # -----------------------------
+                st.markdown(
+                    f"### {result['title']}"
+                )
 
-        st.header("📖 Storyline")
+                st.write(
+                    result["url"]
+                )
 
-        st.info(
-            "The system will automatically find the latest available "
-            "episode and generate the storyline."
-        )
+            st.divider()
 
-        # -----------------------------
-        # HIGH POINT
-        # -----------------------------
+            st.header("📊 Performance")
 
-        st.header("🔥 High Point")
+            col1, col2, col3, col4 = st.columns(4)
 
-        st.info(
-            "The AI will identify the strongest narrative moment "
-            "from the latest available episode."
-        )
+            with col1:
+                st.metric("TRP", "Not yet available")
 
-        # -----------------------------
-        # MAJOR HOOK
-        # -----------------------------
+            with col2:
+                st.metric("TRP Change", "Not yet available")
 
-        st.header("🪝 Major Hook")
+            with col3:
+                st.metric("Latest Episode", "Searching")
 
-        st.info(
-            "The AI will identify the main unresolved question, "
-            "cliffhanger or reason to watch the next episode."
-        )
+            with col4:
+                st.metric("Air Date", "Searching")
 
-        # -----------------------------
-        # CHARACTER INTELLIGENCE
-        # -----------------------------
+            st.divider()
 
-        st.header("👤 Character Intelligence")
+            st.header("📖 Storyline")
 
-        st.info(
-            "The system will identify the primary characters, "
-            "their roles and major character developments."
-        )
+            st.info(
+                "Episode information will be extracted from "
+                "the verified source in the next development stage."
+            )
 
-        # -----------------------------
-        # AUDIENCE INTELLIGENCE
-        # -----------------------------
+            st.header("🔥 High Point")
 
-        st.header("💬 Audience Intelligence")
+            st.info(
+                "AI will identify the strongest narrative moment."
+            )
 
-        st.info(
-            "Public audience reactions will be collected and "
-            "grouped into topics, sentiment and viewer questions."
-        )
+            st.header("🪝 Major Hook")
 
-        # -----------------------------
-        # COMPETITIVE INTELLIGENCE
-        # -----------------------------
+            st.info(
+                "AI will identify the main reason to watch "
+                "the next episode."
+            )
 
-        st.header("🆚 Competitive Intelligence")
+            st.header("👤 Character Intelligence")
 
-        st.info(
-            "Relevant competing Kannada serials and their "
-            "publicly available content will be analyzed."
-        )
+            st.info(
+                "Characters and episode-level developments "
+                "will be extracted automatically."
+            )
 
-        # -----------------------------
-        # DIGITAL OPPORTUNITIES
-        # -----------------------------
+            st.header("💬 Audience Intelligence")
 
-        st.header("📱 Digital Opportunities")
+            st.info(
+                "Public audience reactions will be analysed "
+                "after the source collection layer is connected."
+            )
 
-        col1, col2, col3 = st.columns(3)
+            st.header("🆚 Competitive Intelligence")
 
-        with col1:
-            st.markdown("### 🎬 Reels")
-            st.write("Automatically generated from episode insights.")
-
-        with col2:
-            st.markdown("### 📊 Polls")
-            st.write("Audience interaction ideas based on the story.")
-
-        with col3:
-            st.markdown("### 📢 Promo Hooks")
-            st.write("Potential promotional angles from the episode.")
-
-else:
-
-    st.info(
-        "Enter any Zee Kannada serial above to begin the analysis."
-    )
+            st.info(
+                "Relevant Kannada serials will be identified "
+                "and compared using publicly available information."
+            )
